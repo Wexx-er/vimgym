@@ -288,6 +288,217 @@ class LessonLayout(BaseLayout):
             components.append(code_panel)
         
         return Group(*components)
+    
+    def render_introduction(self, lesson, progress: float) -> None:
+        """Render lesson introduction with objectives and content."""
+        self.console.clear()
+        
+        # Header with lesson info
+        from rich.text import Text
+        title_text = Text(f"📚 {lesson.title}", style="bold cyan")
+        progress_text = Text(f"Progress: {progress:.0f}%", style="dim")
+        header = Panel(
+            title_text + "\n" + progress_text,
+            border_style="bright_blue",
+            padding=(1, 2)
+        )
+        self.console.print(header)
+        
+        # Learning objectives
+        if lesson.content.learning_objectives:
+            self.console.print("\n[bold yellow]🎯 Learning Objectives:[/bold yellow]")
+            for objective in lesson.content.learning_objectives:
+                self.console.print(f"  • {objective}")
+        
+        # Introduction content  
+        if lesson.content.introduction:
+            self.console.print("\n" + lesson.content.introduction)
+        
+        # Instructions
+        if lesson.content.instructions:
+            instructions_panel = Panel(
+                lesson.content.instructions,
+                title="📋 Instructions",
+                border_style="green",
+                padding=(1, 2)
+            )
+            self.console.print("\n")
+            self.console.print(instructions_panel)
+    
+    def render_exercise(self, lesson, exercise, exercise_number: int,
+                       total_exercises: int, simulator_state: Dict[str, Any],
+                       exercise_stats: Dict[str, Any], lesson_progress: float) -> None:
+        """Render current exercise with simulator state and progress."""
+        self.console.clear()
+        
+        # Header with lesson and exercise info
+        from rich.text import Text
+        lesson_title = Text(f"📚 {lesson.title}", style="bold cyan")
+        exercise_title = Text(f"Exercise {exercise_number}/{total_exercises}: {exercise.title}", style="bold yellow")
+        progress_text = Text(f"Lesson Progress: {lesson_progress:.0f}%", style="dim")
+        
+        header_content = lesson_title + "\n" + exercise_title + "\n" + progress_text
+        header = Panel(header_content, border_style="bright_blue", padding=(1, 2))
+        self.console.print(header)
+        
+        # Exercise description and instructions
+        description_panel = Panel(
+            f"[bold]{exercise.description}[/bold]\n\n{exercise.instructions}",
+            title="📋 Exercise Instructions",
+            border_style="green",
+            padding=(1, 2)
+        )
+        self.console.print(description_panel)
+        
+        # Current simulator state
+        self._render_simulator_state(simulator_state)
+        
+        # Exercise statistics
+        if exercise_stats:
+            self._render_exercise_stats(exercise_stats)
+    
+    def _render_simulator_state(self, state: Dict[str, Any]) -> None:
+        """Render the current state of the Vim simulator."""
+        content = state.get("buffer_content", "")
+        cursor_pos = state.get("cursor_position", (0, 0))
+        mode = state.get("mode", "normal")
+        
+        # Display buffer content with cursor
+        lines = content.split('\n') if content else ['']
+        
+        buffer_content = []
+        for i, line in enumerate(lines):
+            if i == cursor_pos[0]:
+                # Show cursor position
+                if cursor_pos[1] < len(line):
+                    cursor_line = line[:cursor_pos[1]] + "[reverse]" + line[cursor_pos[1]] + "[/reverse]" + line[cursor_pos[1]+1:]
+                else:
+                    cursor_line = line + "[reverse] [/reverse]"
+                buffer_content.append(f"{i+1:2d}: {cursor_line}")
+            else:
+                buffer_content.append(f"{i+1:2d}: {line}")
+        
+        # Create buffer panel
+        buffer_text = "\n".join(buffer_content)
+        buffer_panel = Panel(
+            buffer_text,
+            title=f"📝 Buffer (Mode: {mode.upper()})",
+            border_style="blue",
+            padding=(1, 2)
+        )
+        self.console.print(buffer_panel)
+    
+    def _render_exercise_stats(self, stats: Dict[str, Any]) -> None:
+        """Render exercise statistics and progress."""
+        if not stats:
+            return
+        
+        # Create a table for statistics
+        from rich.table import Table
+        table = Table(show_header=False, box=None, padding=(0, 1))
+        table.add_column("Metric", style="dim")
+        table.add_column("Value", style="bold")
+        
+        # Add statistics
+        if "elapsed_time" in stats:
+            table.add_row("⏱️ Time:", f"{stats['elapsed_time']}s")
+        
+        if "commands_executed" in stats and "expected_commands" in stats:
+            progress = stats["commands_executed"] / max(stats["expected_commands"], 1)
+            table.add_row("📊 Progress:", f"{stats['commands_executed']}/{stats['expected_commands']} ({progress:.0%})")
+        
+        if "hints_used" in stats and "hints_available" in stats:
+            table.add_row("💡 Hints:", f"{stats['hints_used']}/{stats['hints_available']}")
+        
+        if "mistakes_made" in stats:
+            table.add_row("❌ Mistakes:", str(stats["mistakes_made"]))
+        
+        # Display stats in a panel
+        stats_panel = Panel(
+            table,
+            title="📈 Exercise Stats",
+            border_style="yellow",
+            padding=(0, 1)
+        )
+        self.console.print(stats_panel)
+    
+    def render_completion_summary(self, lesson, session_stats: Dict[str, Any],
+                                 exercise_results: List[Any]) -> None:
+        """Render lesson completion summary with final statistics."""
+        self.console.clear()
+        
+        # Celebration header
+        from rich.text import Text
+        celebration = Text("🎉 Lesson Completed! 🎉", style="bold green")
+        lesson_title = Text(f"'{lesson.title}'", style="bold cyan")
+        header = Panel(
+            celebration + "\n" + lesson_title,
+            border_style="bright_green",
+            padding=(2, 4)
+        )
+        self.console.print(header)
+        
+        # Session statistics
+        if session_stats:
+            self._render_session_stats(session_stats)
+        
+        # Exercise results summary
+        if exercise_results:
+            self._render_exercise_results(exercise_results)
+        
+        # Lesson summary
+        if lesson.content.summary:
+            summary_panel = Panel(
+                lesson.content.summary,
+                title="📋 Lesson Summary",
+                border_style="green",
+                padding=(1, 2)
+            )
+            self.console.print(summary_panel)
+        
+        # Tips for future
+        if lesson.content.tips:
+            self.console.print("\n[bold blue]💡 Tips to Remember:[/bold blue]")
+            for tip in lesson.content.tips:
+                self.console.print(f"  • {tip}")
+    
+    def _render_session_stats(self, stats: Dict[str, Any]) -> None:
+        """Render session-level statistics."""
+        from rich.table import Table
+        table = Table(title="📊 Session Statistics", show_header=False, box=None)
+        table.add_column("Metric", style="dim")
+        table.add_column("Value", style="bold")
+        
+        if "duration" in stats:
+            minutes = stats["duration"] // 60
+            seconds = stats["duration"] % 60
+            table.add_row("⏱️ Total Time:", f"{minutes}m {seconds}s")
+        
+        if "average_score" in stats:
+            table.add_row("🎯 Average Score:", f"{stats['average_score']:.0f}%")
+        
+        if "exercises_completed" in stats:
+            table.add_row("✅ Exercises:", str(stats["exercises_completed"]))
+        
+        if "total_hints_used" in stats:
+            table.add_row("💡 Total Hints:", str(stats["total_hints_used"]))
+        
+        stats_panel = Panel(table, border_style="blue", padding=(1, 2))
+        self.console.print(stats_panel)
+    
+    def _render_exercise_results(self, results: List[Any]) -> None:
+        """Render individual exercise results."""
+        if not results:
+            return
+        
+        self.console.print("\n[bold blue]📝 Exercise Results:[/bold blue]")
+        
+        for i, result in enumerate(results, 1):
+            status = "✅" if result.passed else "⚠️"
+            score_color = "green" if result.score >= 80 else "yellow" if result.score >= 60 else "red"
+            
+            self.console.print(f"  {status} Exercise {i}: [{score_color}]{result.score}%[/{score_color}] "
+                             f"({result.time_taken}s, {result.hints_used} hints)")
 
 
 class ChallengeLayout(BaseLayout):
