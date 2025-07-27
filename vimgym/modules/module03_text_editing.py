@@ -12,19 +12,18 @@ class Module03TextEditing(LearningModule):
         super().__init__(
             module_id="module_03",
             title="Text Editing & Manipulation",
-            description="Master text editing, copying, pasting, and advanced manipulation techniques",
-            prerequisites=["module_01", "module_02"],
-            estimated_duration=45
+            description="Master text editing, copying, pasting, and advanced manipulation techniques"
         )
-        
-        # Create lessons
-        self.lessons = [
-            self._create_lesson_01_basic_editing(),
-            self._create_lesson_02_copy_paste(),
-            self._create_lesson_03_delete_operations(),
-            self._create_lesson_04_change_operations(),
-            self._create_lesson_05_advanced_editing()
-        ]
+        self.prerequisites = ["module_01", "module_02"]
+        self.estimated_duration = 45
+    
+    def initialize_content(self) -> None:
+        """Initialize all lessons for this module."""
+        self.add_lesson(self._create_lesson_01_basic_editing())
+        self.add_lesson(self._create_lesson_02_copy_paste())
+        self.add_lesson(self._create_lesson_03_delete_operations())
+        self.add_lesson(self._create_lesson_04_change_operations())
+        self.add_lesson(self._create_lesson_05_advanced_editing())
     
     def _create_lesson_01_basic_editing(self) -> Lesson:
         """Lesson 1: Basic Text Editing."""

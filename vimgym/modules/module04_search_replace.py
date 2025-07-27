@@ -12,10 +12,10 @@ class Module04SearchReplace(LearningModule):
         super().__init__(
             module_id="module_04",
             title="Search & Replace",
-            description="Master Vim's powerful search and replace capabilities for efficient text manipulation",
-            prerequisites=["module_01", "module_02", "module_03"],
-            estimated_duration=50
+            description="Master Vim's powerful search and replace capabilities for efficient text manipulation"
         )
+        self.prerequisites = ["module_01", "module_02", "module_03"]
+        self.estimated_duration = 50
     
     def initialize_content(self) -> None:
         """Initialize all lessons for this module."""

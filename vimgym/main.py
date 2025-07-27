@@ -40,7 +40,7 @@ class VimGym:
             debug_mode: Enable debug logging
         """
         self.console = Console()
-        self.theme = get_theme("dark")
+        self.theme = get_theme()
         
         # Set up data directory
         if data_dir:
@@ -58,15 +58,34 @@ class VimGym:
         # Initialize core components
         self.database = JSONDatabase(self.data_dir)
         self.user_manager = UserManager(self.database)
-        self.progress_manager = ProgressManager(self.database)
-        self.session_manager = SessionManager(self.database)
+        
+        # Components requiring user will be initialized after user login
+        self.progress_manager = None
+        self.session_manager = None
         
         # Initialize learning components
         self.simulator = VimSimulator()
         self.content_manager = ContentManager(self.data_dir)
         self.module_manager = self.content_manager.get_module_manager()
         
-        # Initialize lesson runner
+        # Lesson runner and navigator will be initialized after user login
+        self.lesson_runner = None
+        self.lesson_navigator = None
+        
+        # Current state
+        self.current_user: Optional[User] = None
+        self.running = True
+    
+    def _initialize_user_components(self) -> None:
+        """Initialize components that depend on current user."""
+        if not self.current_user:
+            return
+        
+        # Initialize progress manager and session manager with user ID
+        self.progress_manager = ProgressManager(self.current_user.id, self.database)
+        self.session_manager = SessionManager(self.current_user.id, self.database)
+        
+        # Initialize lesson runner and navigator
         self.lesson_runner = LessonRunner(
             self.console,
             self.simulator, 
@@ -78,10 +97,6 @@ class VimGym:
             self.module_manager,
             self.progress_manager
         )
-        
-        # Current state
-        self.current_user: Optional[User] = None
-        self.running = True
     
     def _get_default_config_path(self) -> Path:
         """Get default configuration directory."""
@@ -142,6 +157,7 @@ class VimGym:
             
             if username:
                 self.current_user = self.user_manager.create_user(username)
+                self._initialize_user_components()
                 self.console.print(f"[green]Welcome to VimGym, {username}![/green]")
             else:
                 self.console.print("[red]Invalid username. Exiting.[/red]")
@@ -163,11 +179,13 @@ class VimGym:
             
             if choice <= len(users):
                 self.current_user = users[choice - 1]
+                self._initialize_user_components()
                 self.console.print(f"[green]Welcome back, {self.current_user.username}![/green]")
             else:
                 username = click.prompt("Enter username for new profile", type=str).strip()
                 if username:
                     self.current_user = self.user_manager.create_user(username)
+                    self._initialize_user_components()
                     self.console.print(f"[green]Welcome to VimGym, {username}![/green]")
                 else:
                     self.console.print("[red]Invalid username. Exiting.[/red]")
