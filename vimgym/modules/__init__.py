@@ -1,1 +1,23 @@
 """Learning modules for VimGym."""
+
+from .base import (
+    LearningModule, Lesson, LessonContent, Exercise, ExerciseResult,
+    LessonSession, ModuleManager
+)
+from .content_manager import ContentManager, ContentValidator
+from .module01_basics import Module01Basics
+from .module02_movement import Module02Movement
+
+__all__ = [
+    "LearningModule",
+    "Lesson", 
+    "LessonContent",
+    "Exercise",
+    "ExerciseResult",
+    "LessonSession",
+    "ModuleManager",
+    "ContentManager",
+    "ContentValidator",
+    "Module01Basics",
+    "Module02Movement"
+]
