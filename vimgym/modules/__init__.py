@@ -7,6 +7,7 @@ from .base import (
 from .content_manager import ContentManager, ContentValidator
 from .module01_basics import Module01Basics
 from .module02_movement import Module02Movement
+from .module03_text_editing import Module03TextEditing
 
 __all__ = [
     "LearningModule",
@@ -19,5 +20,6 @@ __all__ = [
     "ContentManager",
     "ContentValidator",
     "Module01Basics",
-    "Module02Movement"
+    "Module02Movement",
+    "Module03TextEditing"
 ]

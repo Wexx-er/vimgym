@@ -11,6 +11,7 @@ from dataclasses import asdict
 from .base import LearningModule, Lesson, LessonContent, Exercise, ModuleManager
 from .module01_basics import Module01Basics
 from .module02_movement import Module02Movement
+from .module03_text_editing import Module03TextEditing
 
 
 class ContentManager:
@@ -35,6 +36,7 @@ class ContentManager:
         # Register built-in modules
         self.module_manager.register_module(Module01Basics())
         self.module_manager.register_module(Module02Movement())
+        self.module_manager.register_module(Module03TextEditing())
     
     def get_module_manager(self) -> ModuleManager:
         """Get the module manager instance."""
