@@ -12,6 +12,7 @@ from .base import LearningModule, Lesson, LessonContent, Exercise, ModuleManager
 from .module01_basics import Module01Basics
 from .module02_movement import Module02Movement
 from .module03_text_editing import Module03TextEditing
+from .module04_search_replace import Module04SearchReplace
 
 
 class ContentManager:
@@ -37,6 +38,7 @@ class ContentManager:
         self.module_manager.register_module(Module01Basics())
         self.module_manager.register_module(Module02Movement())
         self.module_manager.register_module(Module03TextEditing())
+        self.module_manager.register_module(Module04SearchReplace())
     
     def get_module_manager(self) -> ModuleManager:
         """Get the module manager instance."""

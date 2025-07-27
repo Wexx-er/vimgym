@@ -1,73 +1,160 @@
-# VimGym
+# VimGym 🏋️
 
-Interactive tutorial for vim - Learn vim through hands-on exercises and challenges.
+An interactive Vim tutor that helps you learn Vim through hands-on practice in a safe, simulated environment.
+
+## Features
+
+🎯 **Interactive Learning Modules**
+- 4 comprehensive learning modules (more coming soon!)
+- From basics to advanced Vim operations
+- Guided exercises with real-time feedback
+
+🎮 **Vim Simulator**
+- Safe practice environment
+- Real Vim commands and behavior
+- No risk of damaging files
+
+📊 **Progress Tracking**
+- Track your learning progress
+- Completion statistics
+- Learning streaks and achievements
+
+💡 **Smart Hints System**
+- Context-aware hints
+- Step-by-step guidance
+- Common mistake prevention
+
+## Learning Path
+
+1. **Vim Basics & Introduction** - Learn what Vim is and master basic operations
+2. **Movement & Navigation** - Efficient movement and navigation techniques  
+3. **Text Editing** - Master text editing, copying, pasting, and manipulation
+4. **Search & Replace** - Powerful search and replace operations
+5. **File Operations** (coming soon) - Working with files and buffers
+6. **Advanced Features** (coming soon) - Advanced Vim techniques
+7. **Configuration** (coming soon) - Customizing Vim to your needs
+
+## Installation
+
+### From PyPI (when published)
+
+```bash
+pip install vimgym
+```
+
+### From Source
+
+```bash
+git clone https://github.com/marekmajer/vimgym.git
+cd vimgym
+pip install -e .
+```
 
 ## Quick Start
 
-### Installation
+### Start VimGym
 
-1. **Clone the repository:**
-   ```bash
-   git clone <repository-url>
-   cd vimgym
-   ```
+```bash
+vimgym
+```
 
-2. **Set up the development environment:**
-   ```bash
-   # Create virtual environment
-   python3 -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   
-   # Install dependencies
-   pip install --upgrade pip
-   pip install -r requirements-dev.txt
-   
-   # Install VimGym in development mode
-   pip install -e .
-   ```
+### Command Line Options
 
-3. **Verify installation:**
-   ```bash
-   vimgym --help
-   vimgym hello
-   ```
+```bash
+vimgym --help                    # Show help
+vimgym --data-dir /path/to/data  # Use custom data directory
+vimgym --debug                   # Enable debug mode
+```
 
-### Basic Usage
+### Navigation
 
-- `vimgym --help` - Show available commands
-- `vimgym hello` - Test command to verify installation
-- `vimgym status` - Show VimGym status and configuration
+- Use number keys to navigate menus
+- In lessons, type Vim commands directly
+- Use `:hint` for help, `:skip` to skip exercises
+- Practice mode lets you experiment freely
+
+## Requirements
+
+- Python 3.8 or higher
+- Terminal with Unicode support (most modern terminals)
+- No actual Vim installation required!
+
+## Example Session
+
+```
+🏋️ VimGym - Interactive Vim Learning
+
+Welcome! Ready to master Vim?
+
+1. 📚 Start Learning
+2. 🎮 Practice Mode  
+3. 📊 View Progress
+4. ⚙️ Settings
+5. ❓ Help
+0. 🚪 Exit
+
+Select option [0-5]: 1
+
+📚 Module Selection
+
+1. ✅ Vim Basics & Introduction (100%)
+2. 🔄 Movement & Navigation (60%)
+3. 🔓 Text Editing (0%)
+4. 🔓 Search & Replace (0%)
+
+Select module [1-4]: 3
+```
 
 ## Development
 
-For detailed development setup and contribution guidelines, see [docs/development.md](docs/development.md).
-
-### Quick Development Setup
+### Setting up development environment
 
 ```bash
-# Use Make for convenience (optional)
-make install    # Install dependencies
-make test       # Run tests
-make check      # Run all quality checks
-make format     # Format code
+git clone https://github.com/marekmajer/vimgym.git
+cd vimgym
+pip install -e .[dev]
 ```
 
-## Project Structure
+### Running tests
 
-- `vimgym/` - Main Python package
-- `data/` - Tutorial data and configurations
-- `tests/` - Test suite
-- `docs/` - Documentation
+```bash
+pytest
+```
+
+### Code formatting
+
+```bash
+black vimgym/
+```
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Make your changes and add tests
-4. Run quality checks: `make check`
-5. Commit using conventional commits: `git commit -m "feat: add amazing feature"`
-6. Push and create a pull request
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+
+### Areas where help is needed:
+
+- 📚 Additional learning modules
+- 🌐 Internationalization
+- 🎨 Themes and UI improvements
+- 📝 Documentation
+- 🐛 Bug reports and fixes
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT License - see [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- Inspired by `vimtutor` and other Vim learning tools
+- Built with [Rich](https://github.com/Textualize/rich) for beautiful terminal UI
+- Thanks to the Vim community for decades of amazing editor development
+
+## Support
+
+- 🐛 **Bug Reports**: [GitHub Issues](https://github.com/marekmajer/vimgym/issues)
+- 💬 **Questions**: [GitHub Discussions](https://github.com/marekmajer/vimgym/discussions)
+- 📧 **Contact**: Create an issue for questions
+
+---
+
+Happy Vim learning! 🎉

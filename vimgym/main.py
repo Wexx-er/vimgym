@@ -20,6 +20,8 @@ from .core.user import UserManager, User
 from .core.progress import ProgressManager  
 from .core.session import SessionManager
 from .core.database import JSONDatabase
+from .core.logging import setup_logging
+from .core.errors import VimGymError, handle_error, safe_execute
 from .simulator.simulator import VimSimulator
 from .modules.content_manager import ContentManager
 from .features.lesson_runner import LessonRunner, LessonNavigator
@@ -30,11 +32,12 @@ from .ui.menus import MainMenu, ModuleSelectionMenu
 class VimGym:
     """Main VimGym application class."""
     
-    def __init__(self, data_dir: Optional[Path] = None):
+    def __init__(self, data_dir: Optional[Path] = None, debug_mode: bool = False):
         """Initialize VimGym application.
         
         Args:
             data_dir: Optional custom data directory path
+            debug_mode: Enable debug logging
         """
         self.console = Console()
         self.theme = get_theme("dark")
@@ -46,6 +49,11 @@ class VimGym:
             self.data_dir = self._get_default_config_path()
         
         self.data_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Set up logging
+        self.logger = setup_logging(self.data_dir, debug_mode, self.console)
+        self.logger.info(f"VimGym {__version__} starting up")
+        self.logger.info(f"Data directory: {self.data_dir}")
         
         # Initialize core components
         self.database = JSONDatabase(self.data_dir)
@@ -90,13 +98,19 @@ class VimGym:
     def run(self) -> None:
         """Run the main application loop."""
         try:
+            self.logger.info("Starting main application loop")
             self._show_welcome()
             self._initialize_user()
             self._main_loop()
         except KeyboardInterrupt:
+            self.logger.info("Application interrupted by user")
             self._handle_shutdown()
+        except VimGymError as e:
+            handle_error(self.logger, e, "VimGym application error")
+            self.console.print(f"[red]VimGym Error: {e.message}[/red]")
         except Exception as e:
-            self.console.print(f"[red]Error: {e}[/red]")
+            handle_error(self.logger, e, "Unexpected application error")
+            self.console.print(f"[red]Unexpected Error: {e}[/red]")
             if "--debug" in sys.argv:
                 import traceback
                 traceback.print_exc()
@@ -508,7 +522,7 @@ def main(data_dir: Optional[str], debug: bool) -> None:
     data_path = Path(data_dir) if data_dir else None
     
     # Create and run application
-    app = VimGym(data_path)
+    app = VimGym(data_path, debug)
     app.run()
 
 

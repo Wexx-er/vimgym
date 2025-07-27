@@ -35,6 +35,7 @@
 - **Module 1: Basics & Introduction** - 5 lessons covering Vim fundamentals  
 - **Module 2: Movement & Navigation** - 4 lessons on cursor movement and navigation
 - **Module 3: Text Editing** - 5 lessons on insertion, copy/paste, delete/change operations
+- **Module 4: Search & Replace** - 5 lessons on search operations and find/replace
 
 #### Integration & Features  
 - **Main Application** - Complete CLI s module selection, lesson running, practice mode
@@ -47,12 +48,23 @@
 - **Integration tests** pro workflow validation
 - **Performance tests** pro memory a speed optimization
 
+#### Error Handling & Logging
+- **Core Logging** - Centralized logging system s file a console handlers
+- **Custom Exceptions** - VimGym-specific error hierarchy 
+- **Error Handling** - Graceful error handling throughout application
+- **Debug Mode** - Enhanced debugging capabilities
+
+#### Documentation & Packaging
+- **README** - Comprehensive documentation s installation a usage
+- **CLI Optimization** - Enhanced command-line interface  
+- **Error Recovery** - Robust error handling s user feedback
+
 ### 🎯 **DALŠÍ KROKY (Priority)**
 
-1. **Content Expansion** - Moduly 4-7 (Search & Replace, Files, Advanced, Config)
+1. **Content Expansion** - Moduly 5-7 (File Operations, Advanced Features, Configuration)
 2. **Challenge System** - Implementace výzev a gamifikace
 3. **Advanced Features** - Visual mode exercises, macros, registers
-4. **Polish & Testing** - Finalizace a comprehensive testing
+4. **Final Polish** - Testing, optimization, packaging pro PyPI
 
 ---
 
@@ -73,7 +85,8 @@ vimgym/modules/
 ├── content_manager.py        # Content import/export, validation
 ├── module01_basics.py        # Module 1: 5 lessons on Vim basics
 ├── module02_movement.py      # Module 2: 4 lessons on navigation  
-└── module03_text_editing.py  # Module 3: 5 lessons on text editing
+├── module03_text_editing.py  # Module 3: 5 lessons on text editing
+└── module04_search_replace.py # Module 4: 5 lessons on search & replace
 ```
 
 #### Exercise Validation System
